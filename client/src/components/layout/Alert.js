@@ -12,12 +12,11 @@ const Alerts = forwardRef((ref) => {
         <div className='p-2 m-3'></div>
         {alerts.map((alert) => {
           if (alert !== false) {
+            const alertStyle =
+              "shadow-red-100 shadow-lg  text-red-600 p-4 border-red-600  border-2 rounded-sm m-3";
+
             return (
-              <div
-                ref={ref}
-                key={alert.id}
-                className={`shadow-${alert.type}-100 shadow-lg  text-${alert.type}-600 p-4 border-${alert.type}-600  border-2 rounded-sm m-3`}
-              >
+              <div ref={ref} key={alert.id} className={alertStyle}>
                 <i className='fas fa-info-circle mr-3' />
                 {alert.msg}
               </div>

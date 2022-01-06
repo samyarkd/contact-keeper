@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlertContext from "../context/Alert/AlertContext";
+import AuthContext from "../context/auth/AuthContext";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -11,7 +13,10 @@ const Register = () => {
   });
 
   const { name, email, password, password2 } = user;
+
   const { setAlert } = useContext(AlertContext);
+  const { register, error, clearErrors } = useContext(AuthContext);
+
   const inputChangeHandler = (e) => {
     setUser({
       ...user,
@@ -21,12 +26,30 @@ const Register = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     if (name === "" || email === "" || password === "" || password2 === "") {
       setAlert("Please fill out all fields !! ", "red");
-    } else if (password2 === password) {
+    } else if (password2 !== password) {
       setAlert("Passwords dost match !! ", "red");
+    } else {
+      register({
+        name,
+        email,
+        password,
+      });
     }
   };
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted && error === "User already exist") {
+      setAlert(error, "red");
+      clearErrors();
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [error]);
 
   return (
     <div className='grid items-top mt-20 justify-center break-words'>

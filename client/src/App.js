@@ -8,6 +8,7 @@ import AlertState from "./components/context/Alert/AlertState";
 import AuthState from "./components/context/auth/AuthState";
 import ContactState from "./components/context/contact/ContactState";
 import Alerts from "./components/layout/Alert";
+import ResponsiveAppBar from "./components/layout/Navbar";
 import About from "./components/pages/About";
 import Home from "./components/pages/Home";
 
@@ -18,7 +19,7 @@ function App() {
         <AlertState>
           <Router>
             <Fragment>
-              {/* <ResponsiveAppBar />  */}
+              <ResponsiveAppBar />
               <Container maxWidth='lg'>
                 <Alerts />
                 <Routes>
