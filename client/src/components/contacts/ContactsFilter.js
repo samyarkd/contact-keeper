@@ -19,7 +19,7 @@ const ContactsFilter = () => {
         ref={text}
         className='w-100 border border-gray-400 rounded-sm p-1'
         name='search'
-        value={text.current.value}
+        value={text.current.value || ""}
         placeholder='Filter Contacts...'
         onChange={onFilterChange}
       />

@@ -9,7 +9,7 @@ const app = express();
 connectDB();
 
 // Fix Cors error
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000/" }));
 
 // init middleware
 app.use(express.json({ extended: false }));

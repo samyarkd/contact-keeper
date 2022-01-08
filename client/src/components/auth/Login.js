@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlertContext from "../context/Alert/AlertContext";
+import AuthContext from "../context/auth/AuthContext";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -10,6 +12,10 @@ const Login = () => {
 
   const { email, password } = user;
   const { setAlert } = useContext(AlertContext);
+
+  const { login, error, clearErrors, isAuthenticated, loading } =
+    useContext(AuthContext);
+
   const inputChangeHandler = (e) => {
     setUser({
       ...user,
@@ -21,8 +27,24 @@ const Login = () => {
     e.preventDefault();
     if (email === "" || password === "") {
       setAlert("Please fill out all fields !! ", "red");
+    } else {
+      login({
+        email,
+        password,
+      });
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.pathname = "/";
+    }
+
+    if (error === "Invalid Credentials") {
+      setAlert(error, "red");
+      clearErrors();
+    }
+  }, [error, isAuthenticated]);
 
   return (
     <div className='grid items-top mt-40 justify-center break-words'>
@@ -75,7 +97,9 @@ const Login = () => {
               type='submit'
               className='block w-full mb-5 shadow-lg shadow-blue-600 duration-200 hover:bg-blue-500 active:bg-blue-900 bg-blue-600 p-2 text-white rounded-sm'
             >
-              Login
+              {
+                loading ? <i class="fas fa-spinner fa-pulse"></i> : 'Login'
+              }
             </button>
           </div>
         </form>

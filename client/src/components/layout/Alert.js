@@ -2,7 +2,7 @@ import React, { forwardRef, useContext } from "react";
 import FlipMove from "react-flip-move";
 import AlertContext from "../context/Alert/AlertContext";
 
-const Alerts = forwardRef((ref) => {
+const Alerts = forwardRef((_, ref) => {
   const alertContext = useContext(AlertContext);
   const { alerts } = alertContext;
 

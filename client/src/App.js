@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Container } from "@mui/material";
 import { Fragment } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -11,6 +12,11 @@ import Alerts from "./components/layout/Alert";
 import ResponsiveAppBar from "./components/layout/Navbar";
 import About from "./components/pages/About";
 import Home from "./components/pages/Home";
+import setAuthToken from "./components/utils/setAuthToken";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 function App() {
   return (

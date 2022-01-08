@@ -13,9 +13,10 @@ const Register = () => {
   });
 
   const { name, email, password, password2 } = user;
-
   const { setAlert } = useContext(AlertContext);
-  const { register, error, clearErrors } = useContext(AuthContext);
+
+  const { register, error, clearErrors, isAuthenticated, loading } =
+    useContext(AuthContext);
 
   const inputChangeHandler = (e) => {
     setUser({
@@ -23,7 +24,6 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -42,14 +42,20 @@ const Register = () => {
 
   useEffect(() => {
     let mounted = true;
-    if (mounted && error === "User already exist") {
-      setAlert(error, "red");
-      clearErrors();
+    if (mounted) {
+      if (isAuthenticated) {
+        window.location.pathname = "/";
+      }
+
+      if (error === "User already exist") {
+        setAlert(error, "red");
+        clearErrors();
+      }
     }
     return () => {
       mounted = false;
     };
-  }, [error]);
+  }, [error, isAuthenticated]);
 
   return (
     <div className='grid items-top mt-20 justify-center break-words'>
@@ -134,7 +140,9 @@ const Register = () => {
               type='submit'
               className=' block w-full mb-5 shadow-lg shadow-blue-600 duration-200 hover:bg-blue-500 active:bg-blue-900 bg-blue-600 p-2 text-white rounded-sm'
             >
-              Register
+              {
+                loading ? <i class="fas fa-spinner fa-pulse"></i> : 'Rgister'
+              }
             </button>
           </div>
         </form>
