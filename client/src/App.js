@@ -12,6 +12,7 @@ import Alerts from "./components/layout/Alert";
 import ResponsiveAppBar from "./components/layout/Navbar";
 import About from "./components/pages/About";
 import Home from "./components/pages/Home";
+import PrivateRoute from "./components/privateRoutes/PrivateRoutes";
 import setAuthToken from "./components/utils/setAuthToken";
 
 if (localStorage.token) {
@@ -31,7 +32,9 @@ function App() {
                 <Routes>
                   <Route path='/login' element={<Login />} />
                   <Route path='/register' element={<Register />} />
-                  <Route path='/' element={<Home />} />
+                  <Route exact path='/' element={<PrivateRoute />}>
+                    <Route path='/' element={<Home />} />
+                  </Route>
                   <Route path='/About' element={<About />} />
                 </Routes>
               </Container>

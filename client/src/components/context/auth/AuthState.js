@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOGIN_LOAD,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_LOAD,
   REGISTER_SUCCESS,
@@ -22,6 +23,7 @@ const AuthState = (props) => {
     loading: false,
     user: null,
     error: null,
+    loading_state: true,
   };
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -110,6 +112,10 @@ const AuthState = (props) => {
 
   // Logout
 
+  const logout = () => {
+    dispatch({ type: LOGOUT });
+  };
+
   // Clear Errors
   const clearErrors = () => {
     dispatch({ type: CLEAR_ERRORS });
@@ -127,6 +133,8 @@ const AuthState = (props) => {
         clearErrors,
         loadUser,
         login,
+        logout,
+        loading_state: state.loading_state,
       }}
     >
       {props.children}

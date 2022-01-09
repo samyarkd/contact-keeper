@@ -1,140 +1,87 @@
-import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import * as React from "react";
 import { Link } from "react-router-dom";
-const pages = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
+import AuthContext from "../context/auth/AuthContext";
+import ContactContext from "../context/contact/contactContext";
 const ResponsiveAppBar = ({ title, icon }) => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const authContext = React.useContext(AuthContext);
+  const contactContext = React.useContext(ContactContext);
+  const { user, isAuthenticated, logout } = authContext;
+  const { clearContacts } = contactContext;
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const logoutHandler = () => {
+    logout();
+    clearContacts();
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const Authenticated = () => {
+    return (
+      <div className='flex flex-row gap-5'>
+        <div>
+          Hello,
+          <span className='font-medium '> {user && user.name}</span>
+        </div>
+        <ul>
+          <li>
+            <button
+              onClick={logoutHandler}
+              className='flex flex-row items-center gap-3 hover:bg-red-600 duration-200 rounded px-3'
+            >
+              Logout <i className='fas fa-sign-out' />
+            </button>
+          </li>
+        </ul>
+      </div>
+    );
   };
 
+  const GuestUser = () => {
+    return (
+      <div className='flex flex-row gap-5'>
+        <ul>
+          <li>
+            <Link to={"/register"}>Register</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Link to={"/login"}>Login</Link>
+          </li>
+        </ul>
+      </div>
+    );
+  };
   return (
     <AppBar position='static'>
       <Container maxWidth='xl'>
-        <Toolbar disableGutters>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-          >
-            {title}
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpenNavMenu}
-              color='inherit'
+        <Toolbar className='grid justify-between' disableGutters>
+          <Box className='grid grid-cols-2 items-center justify-items-center'>
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
+              {title}
+            </Typography>
+
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
             >
-              {pages.map(({ name, path }, index) => (
-                <MenuItem key={index} onClick={handleCloseNavMenu}>
-                  <Link to={path}>
-                    <Typography textAlign='center'>{name}</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            {title}
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(({ name, path }, index) => (
-              <Button
-                key={index}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link to={path}>{name}</Link>
-              </Button>
-            ))}
+              {title}
+            </Typography>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title='Open settings'>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <i className={icon + " text-white"}></i>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id='menu-appbar'
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {isAuthenticated ? <Authenticated /> : <GuestUser />}
           </Box>
         </Toolbar>
       </Container>

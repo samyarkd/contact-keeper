@@ -8,7 +8,7 @@ const ContactItem = forwardRef(({ contact }, ref) => {
 
   const onDeleteContact = (e) => {
     e.preventDefault();
-    deleteContact(contact.id);
+    deleteContact(contact._id);
     clearCurrent();
   };
 

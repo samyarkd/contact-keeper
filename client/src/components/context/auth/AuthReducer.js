@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   LOGIN_LOAD,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_LOAD,
   REGISTER_SUCCESS,
@@ -31,11 +32,13 @@ export default (state, action) => {
         ...action.payload,
         isAuthenticated: true,
         loading: false,
+        loading_state: false,
       };
 
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case REGISTER_FAIL:
+    case LOGOUT:
       localStorage.removeItem("token");
       return {
         ...state,
@@ -44,6 +47,7 @@ export default (state, action) => {
         isAuthenticated: false,
         loading: false,
         error: action.payload,
+        loading_state: false,
       };
 
     case CLEAR_ERRORS:
